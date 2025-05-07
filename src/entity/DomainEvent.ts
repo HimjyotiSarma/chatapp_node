@@ -2,13 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
-import { Domain_Events, Event_Aggregate_Type } from './Enums'
+import { Domain_Events, Event_Aggregate_Type } from '../database/Enums'
 import { DeliveryStatus } from './DeliveryStatus'
 
 @Entity({ name: 'domain_events' })
+@Index('aggregate_type_id_idx', ['aggregateId', 'aggregateType'])
 export class DomainEvent {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   id!: bigint

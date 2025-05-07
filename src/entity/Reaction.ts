@@ -16,11 +16,13 @@ export class Reaction {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
-  @ManyToOne(() => Message, (message) => message.reactions)
+  @ManyToOne(() => Message, (message) => message.reactions, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'message_id' })
   message!: Message
 
-  @ManyToOne(() => User, (user) => user.reactions)
+  @ManyToOne(() => User, (user) => user.reactions, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user!: User
 

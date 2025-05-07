@@ -1,23 +1,21 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm'
-import { Thread_Roles } from './Enums'
+import { Thread_Roles } from '../database/Enums'
 import { Conversation } from './Conversations'
 import { User } from './User'
 
 @Entity({ name: 'thread_participants' })
-export class ThreadParticipants {
-  //   @PrimaryColumn({ name: 'thread_id' })
-  //   threadId!: string
+export class ThreadParticipant {
+  @PrimaryColumn({ name: 'thread_id', type: 'uuid' })
+  threadId!: string
 
-  //   @PrimaryColumn({ name: 'user_id' })
-  //   userId!: string
+  @PrimaryColumn({ name: 'user_id', type: 'uuid' })
+  userId!: string
 
-  @ManyToOne(() => Conversation, (conversation) => conversation.participants, {
-    nullable: false,
-  })
+  @ManyToOne(() => Conversation, (c) => c.participants, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'thread_id' })
   thread!: Conversation
 
-  @ManyToOne(() => User, (user) => user.threads, { nullable: false })
+  @ManyToOne(() => User, (u) => u.threads, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user!: User
 
@@ -25,7 +23,6 @@ export class ThreadParticipants {
     type: 'enum',
     enum: Thread_Roles,
     default: Thread_Roles.MEMBER,
-    nullable: true,
   })
   role!: Thread_Roles
 }

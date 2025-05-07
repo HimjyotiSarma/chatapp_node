@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { Conversation } from './Conversations'
-import { ThreadParticipants } from './ThreadParticipants'
+import { ThreadParticipant } from './ThreadParticipants'
 import { Message } from './Message'
 import { Reaction } from './Reaction'
 import { WebsocketSession } from './WebsocketSession'
@@ -55,11 +55,11 @@ export class User {
   conversations?: Conversation[]
 
   @OneToMany(
-    () => ThreadParticipants,
-    (threadParticipants) => threadParticipants.user,
+    () => ThreadParticipant,
+    (threadParticipant) => threadParticipant.user,
     { nullable: true }
   )
-  threads?: ThreadParticipants[]
+  threads?: ThreadParticipant[]
 
   @OneToMany(() => Message, (message) => message.sender, { nullable: true })
   messages?: Message[]
@@ -75,7 +75,7 @@ export class User {
   @OneToMany(() => DeliveryStatus, (deliveryStatus) => deliveryStatus.user, {
     nullable: true,
   })
-  deliveryStatus!: DeliveryStatus[]
+  deliveryStatus?: DeliveryStatus[]
 
   @OneToMany(() => ThreadOffset, (threadOffset) => threadOffset.user, {
     nullable: true,

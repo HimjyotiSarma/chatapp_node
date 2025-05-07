@@ -8,9 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
-import { Thread_Types } from './Enums'
+import { Thread_Types } from '../database/Enums'
 import { User } from './User'
-import { ThreadParticipants } from './ThreadParticipants'
+import { ThreadParticipant } from './ThreadParticipants'
 import { Message } from './Message'
 import { ThreadOffset } from './ThreadOffset'
 
@@ -25,22 +25,25 @@ export class Conversation {
   @Column({ type: 'varchar', length: 150, nullable: true })
   name?: string
 
+  @ManyToOne(() => User, (user) => user.conversations, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'created_by' })
+  createdBy!: User
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt?: Date
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt?: Date
 
-  @ManyToOne(() => User, (user) => user.conversations, { nullable: true })
-  @JoinColumn({ name: 'created_by' })
-  createdBy?: User
-
   @OneToMany(
-    () => ThreadParticipants,
+    () => ThreadParticipant,
     (threadParticipants) => threadParticipants.thread,
     { nullable: true }
   )
-  participants?: ThreadParticipants[]
+  participants?: ThreadParticipant[]
 
   @OneToMany(() => Message, (message) => message.conversation, {
     nullable: true,
